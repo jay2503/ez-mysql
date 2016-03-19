@@ -3,8 +3,8 @@ var Q = require('Q'),
 
 var jmEzMySQL = {
     public: {
-        lastQuery : '',
-        lQ : ''
+        lastQuery: '',
+        lQ: ''
     }
 }
 
@@ -79,7 +79,7 @@ jmEzMySQL.prepareQuery = function (tablesAndJoin, fields, where) {
         fList = fields;
     }
 
-    return "SELECT " + fList + " FROM " + tablesAndJoin + " WHERE " + where;
+    return "SELECT " + fList + " FROM " + tablesAndJoin + " WHERE " + (where ? where : '1=1')
 }
 
 /**
@@ -166,6 +166,20 @@ jmEzMySQL.public.delete = function (table, where) {
     var _self = jmEzMySQL;
     var query = 'DELETE FROM ' + Mysql.escapeId(table) + ' WHERE ' + (where ? where : '1=1');
     return _self.public.query(query);
+}
+
+jmEzMySQL.public.testConnecttion = function () {
+    var _self = jmEzMySQL;
+    return Q.promise(function (resolve, reject) {
+        _self.connection()
+            .then(function (connection) {
+                connection.release();
+                resolve("Works!");
+            })
+            .catch(function (err) {
+                reject(err);
+            });
+    });
 }
 
 module.exports = jmEzMySQL.public;
