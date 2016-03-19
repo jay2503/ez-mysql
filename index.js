@@ -49,12 +49,14 @@ jmEzMySQL.public.query = function (query, values) {
 }
 
 jmEzMySQL.public.findAll = function (tablesAndJoin, fields, where) {
-    var q = this.prepareQuery(tablesAndJoin, fields, where);
-    return this.query(q);
+    var _self = jmEzMySQL;
+    var q = _self.prepareQuery(tablesAndJoin, fields, where);
+    return _self.public.query(q);
 }
 
 jmEzMySQL.public.findRaw = function (rawQuery) {
-    return this.query(q);
+    var _self = jmEzMySQL;
+    return _self.public.query(q);
 }
 
 jmEzMySQL.prepareQuery = function (tablesAndJoin, fields, where) {
@@ -69,11 +71,11 @@ jmEzMySQL.prepareQuery = function (tablesAndJoin, fields, where) {
 }
 
 jmEzMySQL.public.first = function (tablesAndJoin, fields, where) {
-    var _self = this;
+    var _self = jmEzMySQL;
     var q = _self.prepareQuery(tablesAndJoin, fields, where) + " LIMIT 0,1";
 
     return Q.promise(function (resolve, reject) {
-        _self.query(q).then(function (results) {
+        _self.public.query(q).then(function (results) {
 
             if (results.length > 0) {
                 resolve(results[0]);
@@ -87,19 +89,22 @@ jmEzMySQL.public.first = function (tablesAndJoin, fields, where) {
 }
 
 jmEzMySQL.public.insert = function (table, data) {
+    var _self = jmEzMySQL;
     var query = 'INSERT INTO ' + Mysql.escapeId(table) + ' SET ?';
-    return this.query(query, data);
+    return _self.public.query(query, data);
 }
 
 jmEzMySQL.public.update = function (table, data, where) {
+    var _self = jmEzMySQL;
     var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1');
     var values = [data];
-    return this.query(query, values);
+    return _self.public.query(query, values);
 }
 
 jmEzMySQL.public.delete = function (table, where) {
+    var _self = jmEzMySQL;
     var query = 'DELETE FROM ' + Mysql.escapeId(table) + ' WHERE ' + (where ? where : '1=1');
-    return this.query(query);
+    return _self.public.query(query);
 }
 
 module.exports = jmEzMySQL.public;
