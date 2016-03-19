@@ -2,21 +2,25 @@ var Q = require('Q'),
     Mysql = require('mysql');
 
 var jmEzMySQL = {
-    public: {}
+    public: {
+        lastQuery : '',
+        lQ : ''
+    }
 }
 
 jmEzMySQL.public.init = function (options) {
+    var _self = jmEzMySQL;
     options.connectionLimit = options.connectionLimit ? options.connectionLimit : 5;
-    this.pool = Mysql.createPool(options);
-    this.lastQuery = this.lQ = '';
+    _self.pool = Mysql.createPool(options);
 }
 
 jmEzMySQL.setLastQuery = function (q) {
-    this.lQ = this.lastQuery = q;
+    var _self = jmEzMySQL;
+    _self.public.lQ = _self.public.lastQuery = q;
 }
 
 jmEzMySQL.connection = function () {
-    var _self = this;
+    var _self = jmEzMySQL;
     return Q.promise(function (resolve, reject) {
         if (!_self || !_self.pool) return reject(new Error('Unexpected Error, Please check your database connection settings and make sure you have init MySQL'));
         _self.pool.getConnection(function (err, connection) {
@@ -28,7 +32,7 @@ jmEzMySQL.connection = function () {
 jmEzMySQL.public.escape = Mysql.escape;
 
 jmEzMySQL.public.query = function (query, values) {
-    var _self = this;
+    var _self = jmEzMySQL;
     return Q.promise(function (resolve, reject) {
         _self.connection()
             .then(function (connection) {
@@ -89,7 +93,7 @@ jmEzMySQL.public.insert = function (table, data) {
 
 jmEzMySQL.public.update = function (table, data, where) {
     var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1');
-    var values = [record];
+    var values = [data];
     return this.query(query, values);
 }
 

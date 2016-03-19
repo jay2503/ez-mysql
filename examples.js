@@ -1,5 +1,6 @@
 var My = require('./index.js');
 
+// Init DB Connection
 My.init({
     host: 'localhost',
     user: 'root',
@@ -7,21 +8,34 @@ My.init({
     database: 'psu',
 });
 
-// Ohh!
+
+// Select All
+My.findAll("psu_project", ["id"], "1=1").then(function (r) {
+    console.log(r)
+})
+
+// Select First
+My.first("psu_project", ["id"], "1=1 ").then(function (r) {
+    console.log(r);
+});
+
+// Insert
 My.insert("temp", {
     name: 'Jay'
 }).then(function (result) {
     console.log(result.insertId)
 })
 
-return;
+// Update
+My.update("temp", {
+    name: 'Jayu'
+}, "id = 2").then(function (result) {
+    console.log(My.lQ);
+})
 
-My.first("psu_project", ["id"], "1=1 ").then(function (r) {
-    console.log(r);
-});
-
-My.findAll("psu_project", ["id"], "1=1").then(function (r) {
-    console.log(r)
+// Delete
+My.delete("temp", "id = 1").then(function () {
+    console.log(My.lQ);
 })
 
 // Pure MySQL Query
@@ -35,12 +49,5 @@ My.query("select * from psu_project where id = " + My.escape(id))
         console.log(err);
     });
 
-
-My.query("select * from psu_project where id = ?", [id])
-    .then(function (results) {
-        console.log('My query results', results);
-        console.log('Lq', My.lQ);
-    })
-    .catch(function (err) {
-        console.log(err);
-    });
+// Get Last fired Query
+console.log(My.lQ);

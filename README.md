@@ -1,6 +1,14 @@
 # jm-ez-mysql
+
+## Overview
 Easy MySQL Wrapper for NodeJS
 
+## Installation
+<pre>
+npm install jm-ez-mysql --save
+</pre>
+
+## Examples
 <pre>
 // Init DB Connection
 My.init({
@@ -54,3 +62,6 @@ My.query("select * from psu_project where id = " + My.escape(id))
 // Get Last fired Query
 console.log(My.lQ);
 </pre>
+
+## License
+The MIT License (MIT)
