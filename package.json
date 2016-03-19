@@ -1,6 +1,6 @@
 {
   "name": "jm-ez-mysql",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Easy MySQL Wrapper",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jay2503/ez-mysql.git"
+    "url": "git+https://github.com/jay2503/jm-ez-mysql.git"
   },
   "keywords": [
     "mysql",
@@ -21,7 +21,7 @@
     "database"
   ],
   "author": "Jay Mehta",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jay2503/jm-ez-mysql/issues"
   },
