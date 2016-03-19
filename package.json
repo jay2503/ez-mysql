@@ -1,0 +1,33 @@
+{
+  "name": "jm-ez-mysql",
+  "version": "0.0.2",
+  "description": "Easy MySQL Wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jay2503/ez-mysql.git"
+  },
+  "keywords": [
+    "mysql",
+    "nodejs",
+    "wrapper",
+    "mysql",
+    "helper",
+    "node",
+    "utility",
+    "database"
+  ],
+  "author": "Jay Mehta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jay2503/jm-ez-mysql/issues"
+  },
+  "homepage": "https://github.com/jay2503/jm-ez-mysql#readme",
+  "dependencies": {
+    "mysql": "github:felixge/node-mysql",
+    "q": "^1.4.1"
+  }
+}

@@ -1,2 +1,2 @@
-# ez-mysql
+# jm-ez-mysql
 Easy MySQL Wrapper for NodeJS
