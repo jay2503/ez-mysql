@@ -18,7 +18,6 @@ My.first("psu_project", ["id"], "1=1 ").then(function (r) {
     console.log(r);
 });
 
-
 // Insert
 My.insert("temp", {
     name: 'Jay'
@@ -26,14 +25,12 @@ My.insert("temp", {
     console.log(result.insertId)
 })
 
-
 // Update
 My.update("temp", {
     name: 'Jayu'
 }, "id = 2").then(function (result) {
     console.log(My.lQ);
 })
-
 
 // Delete
 My.delete("temp", "id = 6").then(function () {
