@@ -1,3 +1,4 @@
+// var My = require("jm-ez-mysql");
 var My = require('./index.js');
 
 // Init DB Connection

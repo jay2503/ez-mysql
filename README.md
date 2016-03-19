@@ -10,6 +10,8 @@ npm install jm-ez-mysql --save
 
 ## Examples
 <pre>
+var My = require("jm-ez-mysql");
+
 // Init DB Connection
 My.init({
     host: 'localhost',
