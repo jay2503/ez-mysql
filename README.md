@@ -4,12 +4,12 @@
 Easy MySQL Wrapper for NodeJS
 
 ## Installation
-<pre>
+```sh
 npm install jm-ez-mysql --save
-</pre>
+```
 
 ## Examples
-<pre>
+```js
 var My = require("jm-ez-mysql");
 
 // Init DB Connection
@@ -73,7 +73,7 @@ My.query("select * from psu_project where id = ?", [id])
 
 // Get Last fired Query
 console.log(My.lQ);
-</pre>
+```
 
 ## License
 The MIT License (MIT)
