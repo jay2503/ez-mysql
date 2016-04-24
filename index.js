@@ -143,6 +143,18 @@ jmEzMySQL.public.insert = function (table, data) {
 }
 
 /**
+ * Replace
+ * @param {string} table
+ * @param {object} data
+ * @public
+ */
+jmEzMySQL.public.replace = function (table, data) {
+    var _self = jmEzMySQL;
+    var query = 'REPLACE INTO ' + Mysql.escapeId(table) + ' SET ?';
+    return _self.public.query(query, data);
+}
+
+/**
  * Update
  * @param {string} table
  * @param {object} data
