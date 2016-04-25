@@ -1,4 +1,4 @@
-var Q = require('Q'),
+var Q = require('q'),
     Mysql = require('mysql');
 
 var jmEzMySQL = {
