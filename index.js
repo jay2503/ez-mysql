@@ -1,4 +1,4 @@
-var Q = require('Q'),
+var Q = require('q'),
     Mysql = require('mysql');
 
 var jmEzMySQL = {
@@ -82,6 +82,17 @@ jmEzMySQL.prepareQuery = function (tablesAndJoin, fields, where) {
     return "SELECT " + fList + " FROM " + tablesAndJoin + " WHERE " + (where ? where : '1=1')
 }
 
+jmEzMySQL.prepareQueryWithCount = function (tablesAndJoin, countColumn, fields, where, additional) {
+    var fList = "";
+    if (typeof fields == 'object') {
+        fList = fields.join(', ');
+    } else {
+        fList = fields;
+    }
+
+    return "SELECT " + fList + " FROM " + tablesAndJoin + " WHERE " + (where ? where : '1=1 ') + additional + ";" + "SELECT " + "count( " + countColumn + " ) as total" + " FROM " + tablesAndJoin + " WHERE " + (where ? where : '1=1');
+}
+
 /**
  * Select all
  * @param {string} tablesAndJoin
@@ -93,6 +104,23 @@ jmEzMySQL.public.findAll = function (tablesAndJoin, fields, where) {
     var _self = jmEzMySQL;
     var q = _self.prepareQuery(tablesAndJoin, fields, where);
     return _self.public.query(q);
+}
+
+/**
+ * Select all
+ * @param {string} tablesAndJoin
+ * @param {string} countColumn
+ * @param {array} fields
+ * @param {string} where
+ * @param {string} additional operations
+ * @public
+ */
+
+jmEzMySQL.public.findAllWithCount = async function (tablesAndJoin, countColumn, fields, where, additional) {
+    var _self = jmEzMySQL;
+    var q = _self.prepareQueryWithCount(tablesAndJoin, countColumn, fields, where, additional);
+    const [result, count] = await _self.public.query(q);
+    return { result, count: count[0].total };
 }
 
 /**
@@ -139,6 +167,18 @@ jmEzMySQL.public.first = function (tablesAndJoin, fields, where) {
 jmEzMySQL.public.insert = function (table, data) {
     var _self = jmEzMySQL;
     var query = 'INSERT INTO ' + Mysql.escapeId(table) + ' SET ?';
+    return _self.public.query(query, data);
+}
+
+/**
+ * Replace
+ * @param {string} table
+ * @param {object} data
+ * @public
+ */
+jmEzMySQL.public.replace = function (table, data) {
+    var _self = jmEzMySQL;
+    var query = 'REPLACE INTO ' + Mysql.escapeId(table) + ' SET ?';
     return _self.public.query(query, data);
 }
 
