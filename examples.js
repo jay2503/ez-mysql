@@ -15,7 +15,7 @@ My.findAll("psu_project", ["id"], "1=1").then(function (r) {
 })
 
 // Select All with count
-My.findAllWithCount("psu_project", "id", ["id"], "1=1", "LIMIT 0 5").then(function (r) {
+My.findAllWithCount("psu_project", "id", ["id"], "1=1", "LIMIT 0, 5").then(function (r) {
     console.log(r)
 })
 
@@ -71,7 +71,7 @@ My.findAll("psu_project", ["id"], "id=?", [id]).then(function (r) {
 })
 
 // Select All with count using prepared statement
-My.findAllWithCount("psu_project", "id", ["id"], "id=?", "LIMIT 0 5", ["id"]).then(function (r) {
+My.findAllWithCount("psu_project", "id", ["id"], "id=?", "LIMIT 0, 5", ["id"]).then(function (r) {
     console.log(r)
 })
 
