@@ -71,6 +71,33 @@ My.query("select * from psu_project where id = ?", [id])
         console.log(err);
     });
 
+// Select All using prepared statement
+My.findAll("psu_project", ["id"], "id=?", [id]).then(function (r) {
+    console.log(r)
+})
+
+// Select All with count using prepared statement
+My.findAllWithCount("psu_project", "id", ["id"], "id=?", "LIMIT 0 5", ["id"]).then(function (r) {
+    console.log(r)
+})
+
+// Select First using prepared statement
+My.first("psu_project", ["id"], "1=? ", [id]).then(function (r) {
+    console.log(r);
+});
+
+// Update using prepared statement
+My.update("temp", {
+    name: 'Jayu'
+}, "id = ?", [id]).then(function (result) {
+    console.log(My.lQ);
+})
+
+// Delete using prepared statement
+My.delete("temp", "id = ?", [id]).then(function () {
+    console.log(My.lQ);
+})
+
 // Get Last fired Query
 console.log(My.lQ);
 ```
