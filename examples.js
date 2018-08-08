@@ -14,6 +14,11 @@ My.findAll("psu_project", ["id"], "1=1").then(function (r) {
     console.log(r)
 })
 
+// Select All with count
+My.findAllWithCount("psu_project", "id", ["id"], "1=1", "LIMIT 0 5").then(function (r) {
+    console.log(r)
+})
+
 // Select First
 My.first("psu_project", ["id"], "1=1 ").then(function (r) {
     console.log(r);
@@ -34,7 +39,7 @@ My.update("temp", {
 })
 
 // Delete
-My.delete("temp", "id = 6").then(function () {
+My.delete("temp", "id = ?").then(function () {
     console.log(My.lQ);
 })
 
@@ -59,6 +64,33 @@ My.query("select * from psu_project where id = ?", [id])
     .catch(function (err) {
         console.log(err);
     });
+
+// Select All using prepared statement
+My.findAll("psu_project", ["id"], "id=?", [id]).then(function (r) {
+    console.log(r)
+})
+
+// Select All with count using prepared statement
+My.findAllWithCount("psu_project", "id", ["id"], "id=?", "LIMIT 0 5", ["id"]).then(function (r) {
+    console.log(r)
+})
+
+// Select First using prepared statement
+My.first("psu_project", ["id"], "1=? ", [id]).then(function (r) {
+    console.log(r);
+});
+
+// Update using prepared statement
+My.update("temp", {
+    name: 'Jayu'
+}, "id = ?", [id]).then(function (result) {
+    console.log(My.lQ);
+})
+
+// Delete using prepared statement
+My.delete("temp", "id = ?", [id]).then(function () {
+    console.log(My.lQ);
+})
 
 // Get Last fired Query
 console.log(My.lQ);
