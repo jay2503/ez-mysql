@@ -98,12 +98,13 @@ jmEzMySQL.prepareQueryWithCount = function (tablesAndJoin, countColumn, fields, 
  * @param {string} tablesAndJoin
  * @param {array} fields
  * @param {string} where
+ * @param {string} values
  * @public
  */
-jmEzMySQL.public.findAll = function (tablesAndJoin, fields, where) {
+jmEzMySQL.public.findAll = function (tablesAndJoin, fields, where, values) {
     var _self = jmEzMySQL;
     var q = _self.prepareQuery(tablesAndJoin, fields, where);
-    return _self.public.query(q);
+    return _self.public.query(q, values);
 }
 
 /**
@@ -113,13 +114,14 @@ jmEzMySQL.public.findAll = function (tablesAndJoin, fields, where) {
  * @param {array} fields
  * @param {string} where
  * @param {string} additional operations
+ * @param {string} values
  * @public
  */
 
-jmEzMySQL.public.findAllWithCount = async function (tablesAndJoin, countColumn, fields, where, additional) {
+jmEzMySQL.public.findAllWithCount = async function (tablesAndJoin, countColumn, fields, where, additional, values) {
     var _self = jmEzMySQL;
     var q = _self.prepareQueryWithCount(tablesAndJoin, countColumn, fields, where, additional);
-    const [result, count] = await _self.public.query(q);
+    const [result, count] = await _self.public.query(q, values ? values.concat(values) : null);
     return { result, count: count[0].total };
 }
 
@@ -138,14 +140,15 @@ jmEzMySQL.public.findRaw = function (rawQuery) {
  * @param {string} tablesAndJoin
  * @param {array} fields
  * @param {string} where
+ * @param {string} values
  * @public
  */
-jmEzMySQL.public.first = function (tablesAndJoin, fields, where) {
+jmEzMySQL.public.first = function (tablesAndJoin, fields, where, values) {
     var _self = jmEzMySQL;
     var q = _self.prepareQuery(tablesAndJoin, fields, where) + " LIMIT 0,1";
 
     return Q.promise(function (resolve, reject) {
-        _self.public.query(q).then(function (results) {
+        _self.public.query(q, values).then(function (results) {
 
             if (results.length > 0) {
                 resolve(results[0]);
@@ -187,25 +190,27 @@ jmEzMySQL.public.replace = function (table, data) {
  * @param {string} table
  * @param {object} data
  * @param {string} where
+ * @param {string} values
  * @public
  */
-jmEzMySQL.public.update = function (table, data, where) {
+jmEzMySQL.public.update = function (table, data, where, values) {
     var _self = jmEzMySQL;
     var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1');
-    var values = [data];
-    return _self.public.query(query, values);
+    var _values = [data].concat(values);
+    return _self.public.query(query, _values);
 }
 
 /**
  * Delete
  * @param {string} table
  * @param {string} where
+ * @param {string} values
  * @public
  */
-jmEzMySQL.public.delete = function (table, where) {
+jmEzMySQL.public.delete = function (table, where, values) {
     var _self = jmEzMySQL;
     var query = 'DELETE FROM ' + Mysql.escapeId(table) + ' WHERE ' + (where ? where : '1=1');
-    return _self.public.query(query);
+    return _self.public.query(query, values);
 }
 
 jmEzMySQL.public.testConnecttion = function () {
