@@ -34,6 +34,15 @@ jmEzMySQL.connection = function () {
     });
 }
 
+
+/**
+ * Format Query
+ * @param {sql} input
+ * @param {inserts} input
+ * @public
+ */
+jmEzMySQL.public.format = Mysql.format;
+
 /**
  * Escape User Input
  * @param {string} input
