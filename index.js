@@ -69,7 +69,7 @@ jmEzMySQL.public.query = function (query, values) {
         _self.connection()
             .then(function (connection) {
                 var processed = connection.query(query, values, function (err, results) {
-                    connection.release();
+                    connection.destroy();
                     return err ? reject(err) : resolve(results);
                 });
                 _self.setLastQuery(processed.sql);
