@@ -131,7 +131,7 @@ jmEzMySQL.public.findAllWithCount = async function (tablesAndJoin, countColumn, 
     var _self = jmEzMySQL;
     var q = _self.prepareQueryWithCount(tablesAndJoin, countColumn, fields, where, additional);
     const [result, count] = await _self.public.query(q, values ? values.concat(values) : null);
-    return { result, count: count[0].total };
+    return { result, count: count.length > 0 ? count[0].total : 0 };
 }
 
 /**
