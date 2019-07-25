@@ -38,6 +38,13 @@ My.update("temp", {
     console.log(My.lQ);
 })
 
+// Update First
+My.updateFirst("temp", {
+    name: 'Jayu'
+}, "id = 2").then(function (result) {
+    console.log(My.lQ);
+})
+
 // Delete
 My.delete("temp", "id = ?").then(function () {
     console.log(My.lQ);
@@ -82,6 +89,13 @@ My.first("psu_project", ["id"], "1=? ", [id]).then(function (r) {
 
 // Update using prepared statement
 My.update("temp", {
+    name: 'Jayu'
+}, "id = ?", [id]).then(function (result) {
+    console.log(My.lQ);
+})
+
+// Update First using prepared statement
+My.updateFirst("temp", {
     name: 'Jayu'
 }, "id = ?", [id]).then(function (result) {
     console.log(My.lQ);

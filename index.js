@@ -201,6 +201,21 @@ jmEzMySQL.public.update = function (table, data, where, values) {
 }
 
 /**
+ * Update
+ * @param {string} table
+ * @param {object} data
+ * @param {string} where
+ * @param {string} values
+ * @public
+ */
+jmEzMySQL.public.updateFirst = function (table, data, where, values) {
+    var _self = jmEzMySQL;
+    var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1') + ' LIMIT 1';
+    var _values = [data].concat(values);
+    return _self.public.query(query, _values);
+}
+
+/**
  * Delete
  * @param {string} table
  * @param {string} where
