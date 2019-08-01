@@ -34,6 +34,15 @@ jmEzMySQL.connection = function () {
     });
 }
 
+
+/**
+ * Format Query
+ * @param {sql} input
+ * @param {inserts} input
+ * @public
+ */
+jmEzMySQL.public.format = Mysql.format;
+
 /**
  * Escape User Input
  * @param {string} input
@@ -60,7 +69,7 @@ jmEzMySQL.public.query = function (query, values) {
         _self.connection()
             .then(function (connection) {
                 var processed = connection.query(query, values, function (err, results) {
-                    connection.release();
+                    connection.destroy();
                     return err ? reject(err) : resolve(results);
                 });
                 _self.setLastQuery(processed.sql);
@@ -122,7 +131,7 @@ jmEzMySQL.public.findAllWithCount = async function (tablesAndJoin, countColumn, 
     var _self = jmEzMySQL;
     var q = _self.prepareQueryWithCount(tablesAndJoin, countColumn, fields, where, additional);
     const [result, count] = await _self.public.query(q, values ? values.concat(values) : null);
-    return { result, count: count[0].total };
+    return { result, count: count.length > 0 ? count[0].total : 0 };
 }
 
 /**

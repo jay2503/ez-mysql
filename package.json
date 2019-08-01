@@ -1,6 +1,6 @@
 {
   "name": "jm-ez-mysql",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "Easy MySQL Wrapper",
   "main": "index.js",
   "scripts": {
