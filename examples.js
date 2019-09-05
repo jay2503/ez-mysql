@@ -31,6 +31,15 @@ My.insert("temp", {
     console.log(result.insertId)
 })
 
+// Insert Multiple Rows
+My.insertMany("temp", [{
+    name: 'Jay'
+}, {
+    name: 'Subham'
+}]).then(function (result) {
+    console.log(result.insertId)
+})
+
 // Update
 My.update("temp", {
     name: 'Jayu'
