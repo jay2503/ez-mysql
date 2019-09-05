@@ -183,6 +183,23 @@ jmEzMySQL.public.insert = function (table, data) {
 }
 
 /**
+ * Insert Multiple Rows
+ * @param {string} table
+ * @param {object} data
+ * @public
+ */
+jmEzMySQL.public.insertMany = function (table, data) {
+    var _self = jmEzMySQL;
+    const columns = Object.keys(data[0]);
+    const dataArr = [];
+    data.forEach((d) => {
+        dataArr.push(Object.values(d));
+    });
+    var query = 'INSERT INTO ' + Mysql.escapeId(table) + ` (${columns}) VALUES ?`;
+    return _self.public.query(query, [dataArr]);
+}
+
+/**
  * Replace
  * @param {string} table
  * @param {object} data
@@ -205,6 +222,21 @@ jmEzMySQL.public.replace = function (table, data) {
 jmEzMySQL.public.update = function (table, data, where, values) {
     var _self = jmEzMySQL;
     var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1');
+    var _values = [data].concat(values);
+    return _self.public.query(query, _values);
+}
+
+/**
+ * Update
+ * @param {string} table
+ * @param {object} data
+ * @param {string} where
+ * @param {string} values
+ * @public
+ */
+jmEzMySQL.public.updateFirst = function (table, data, where, values) {
+    var _self = jmEzMySQL;
+    var query = 'UPDATE ' + Mysql.escapeId(table) + ' SET ? WHERE ' + (where ? where : '1=1') + ' LIMIT 1';
     var _values = [data].concat(values);
     return _self.public.query(query, _values);
 }
