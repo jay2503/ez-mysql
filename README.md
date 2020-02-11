@@ -126,8 +126,117 @@ My.delete("temp", "id = ?", [id]).then(function () {
     console.log(My.lQ);
 })
 
+//Select Query with where condition
+const selectQuery = My.initQuery();
+selectQuery.where('id', 1);
+selectQuery.execute("table");
+
+//Select Query with multiple where condition
+const selectQuery = My.initQuery();
+selectQuery.where('id', 1);
+selectQuery.where('name', 'anish');
+selectQuery.execute("table");
+
+
+//Select Query with multiple(AND/OR) where condition
+const selectQuery = My.initQuery();
+selectQuery.where('id', 1);
+selectQuery.orWhere('name', 'serchContent');
+selectQuery.execute("table");
+//query : SELECT  *  FROM table  WHERE id = 1   OR  name = 'serchContent';
+
+//Select Query with multiple(AND/OR) with multple condition where condition
+const selectQuery = My.initQuery();
+selectQuery.where('(id = ? OR id = ?)', [1, 50]);
+selectQuery.orWhere('name', 'serchContent');
+selectQuery.execute("table");
+
+//Another way to pass condition value
+const selectQuery = My.initQuery();
+newQuery.where('(id = ? OR id = ?)');
+selectQuery.orWhere('name', 'serchContent');
+selectQuery.execute("table", [1, 50]);
+//query: SELECT  *  FROM table WHERE (id = 1 OR id = 50)  OR  name = 'serchContent';
+
+//Select custom fields
+const selectQuery = My.initQuery();
+selectQuery.select('name, id, data'); // argument can be String|Array , Default will *
+selectQuery.execute("table", [1, 50]);
+//Query: SELECT name, id, data FROM table  WHERE 1=1
+
+//Use joins : 
+
+// Ex1. Left Join
+const selectQuery = My.initQuery();
+selectQuery.leftJoin("table2 as t2", "t2.t1ID = t1.id "); 
+selectQuery.execute("table as t1");
+
+// Query: SELECT  *  FROM table1 as t1 LEFT  JOIN table2 as t2 ON t2.t1ID = t1.id  WHERE 1=1;
+
+// Ex2. Left and Right Join
+const selectQuery = My.initQuery();
+selectQuery.leftJoin("table2 as t2", "t2.t1ID = t1.id "); 
+selectQuery.rightJoin("table3 as t3", "t3.t1ID = t1.id "); 
+selectQuery.execute("table as t1");
+//Query: SELECT  *  FROM table1 as t1 LEFT  JOIN table2 as t2 ON t2.t1ID = t1.id  RIGHT  JOIN table3 as t3 ON t3.t1ID = t1.id  WHERE 1=1;
+
+// Ex3. Left Join with Condition
+const selectQuery = My.initQuery();
+selectQuery.leftJoin("table2 as t2", "t2.t1ID = t1.id AND t2.name = ? "); 
+selectQuery.execute("table as t1", ['anish']);
+//query: SELECT  *  FROM table as t1 LEFT  JOIN table2 as t2 ON t2.t1ID = t1.id AND t2.name = 'anish'  WHERE 1=1; 
+
+// Ex4. Inner Join
+
+const selectQuery = My.initQuery();
+selectQuery.innerJoin("table2 as t2", "t2.t1ID = t1.id");
+selectQuery.execute("table as t1", ['anish']);
+// Query: SELECT  *  FROM table1 as t1 INNER  JOIN table2 as t2 ON t2.t1ID = t1.id  WHERE 1=1;
+
+// Ex5.
+const selectQuery = My.initQuery();
+selectQuery.join("table2 as t2", "t2.t1ID = t1.id", "left"); // third argument will join type ex. (left, right, right outer, ...), default will inner
+selectQuery.execute("table as t1", ['anish']);
+
+
+
+//Use last query for count
+const selectQuery = My.initQuery();
+selectQuery.select('name, id, data'); // argument can be String|Array , Default will *
+selectQuery.where('(id = ? OR id = ?)', [1, 50]);
+selectQuery.orWhere('name', 'serchContent');
+selectQuery.execute("table", [], true); // If third argument will be true than last condition will remains and used for further process, like for count.
+//Qeury: SELECT name, id, data FROM table  WHERE (id = 1 OR id = 50)  OR  name = 'serchContent'
+
+selectQuery.count(); // argument will string any filed name, defaul will id 
+selectQuery.execute("table");
+//Qeury: SELECT COUNT(table.id) as count  FROM table  WHERE (id = 1 OR id = 50) OR  name = 'serchContent'
+
+
+//Use order by
+const selectQuery = My.initQuery();
+selectQuery.orderBy('id', 'ASC');
+selectQuery.orderBy('name', 'DESC');
+selectQuery.execute("table");
+//Query: SELECT  *  FROM table  WHERE 1=1 ORDER BY id ASC, name DESC\
+
+//Use group by
+const selectQuery = My.initQuery();
+selectQuery.groupBy('id'); //
+selectQuery.execute("table");
+//Query:SELECT  *  FROM table  WHERE 1=1 GROUP BY id 
+
+//Use Limit 
+const selectQuery = My.initQuery();
+selectQuery.skip(2); // number of record want to skip
+selectQuery.limit(10); //
+selectQuery.execute("table");
+//Query:SELECT  *  FROM table  WHERE 1=1 LIMIT 2, 10
+
+
 // Get Last fired Query
 console.log(My.lQ);
+
 ```
 
 ## License

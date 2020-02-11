@@ -268,4 +268,223 @@ jmEzMySQL.public.testConnecttion = function () {
     });
 }
 
+const _prepareJoinStatement = function _prepareJoinStatement(joinName, property, condition) {
+    if (property && condition) {
+        this.joins.push(`${ (joinName || 'inner').toUpperCase()} JOIN ` + property + ' ON ' + condition);
+    }
+}
+
+/**
+ * INNER JOIN
+ * @param {string} tableJoinName
+ * @param {String} tableJoinCondition
+ * @public
+ */
+const innerJoin = function (tableJoinName, tableJoinCondition) {
+    _prepareJoinStatement.apply(this, [tableJoinName, tableJoinCondition]);
+}
+/**
+ * LEFT JOIN
+ * @param {string} tableJoinName
+ * @param {String} tableJoinCondition
+ * @public
+ */
+const leftJoin = function (tableJoinName, tableJoinCondition) {
+    _prepareJoinStatement.apply(this, ['left ', tableJoinName, tableJoinCondition]);
+}
+/**
+ * RIGHT JOIN
+ * @param {string} tableJoinName
+ * @param {String} tableJoinCondition
+ * @public
+ */
+const rightJoin = function (tableJoinName, tableJoinCondition) {
+    _prepareJoinStatement.apply(this, ['right ', tableJoinName, tableJoinCondition]);
+}
+/**
+ * JOIN (Default : INNER)
+ * @param {string} tableJoinName
+ * @param {String} tableJoinCondition
+ * @public
+ */
+const join = function (tableJoinName, tableJoinCondition, joinType) {
+    _prepareJoinStatement.apply(this, [`${joinType || ''}`, tableJoinName, tableJoinCondition]);
+}
+
+
+const _prepareConditionalQuery = (where, values) => {
+    // check if condition having replacement symbol or not
+    where.indexOf('?') === -1 && (where = `${where} = ? `);
+    if (!values) return where;
+    let conditionValues = [];
+    if (values) {
+        conditionValues = typeof values == 'object' ? values : [values];
+    }
+    // '?' will replace with actual values
+    for (let i = 0; i < conditionValues.length; i++) {
+        where = where.replace('?', Mysql.escape(conditionValues[i]));
+    }
+    return where;
+}
+/**
+ * WHERE 
+ * @param {string} fieldName
+ * * @param {Array|String} values
+ * @param {boolean} shouldBracketContains
+ * @public
+ */
+
+const where = function (fieldName, values) {
+    if (!fieldName) {
+        throw new Error('Missing first argument fieldName.');
+        return;
+    } 
+    this.whereStatement.push(_prepareConditionalQuery(fieldName, values));
+    
+}
+/**
+ * OR WHERE 
+ * @param {string} fieldName
+ * @param {Array | String} values
+ * @public
+ */
+const orWhere = function (fieldName, values) {
+    if (!fieldName) {
+        throw new Error('Missing first argument fieldName.');
+        return;
+    } 
+    this.orWhereStatement.push(_prepareConditionalQuery(fieldName, values));
+}
+/**
+ * SELECT FIELDS
+ * @param {string || array} fields
+ * @public
+ */
+const select = function (fields) {
+    fields && (this.selectFields =  (fields == 'object' ? fields.join(', '): fields));
+}
+/**
+ * SET COUNT ON FIELD NAME
+ * @param {string} fieldName
+ * @public
+ */
+const count = function (fieldName) {
+    this.countField =  `COUNT(${fieldName || 'id'}) as count `;
+}
+/**
+ * SET GROUP BY
+ * @param {string } groupBy
+ * @public
+ */
+const groupBy = function (groupBy) {
+    this.groupByFields = groupBy;
+}
+/**
+ * SET ORDER BY
+ * @param {string } orderBy
+ * @param {string } ordderType
+ * @public
+ */
+const orderBy = function (orderBy, ordderType) {
+    this.orderByFields.push(`${orderBy} ${ordderType || 'ASC'}`);
+}
+/**
+ * SET SKIP
+ * @param {number} skipVal
+ * @public
+ */
+const skip = function (skipVal) {
+    this.skipFieldValue = skipVal;
+}
+/**
+ * SET LIMIT
+ * @param {number} limitVal
+ * @public
+ */
+const limit = function (limitVal) {
+    this.limitFieldValue = limitVal;
+}
+/**
+ * TRIGGER QUERY 
+ * @param {string } from
+ * @param { array } values
+ * * @param { Boolean } skipReset
+ * @public
+ */
+const execute = function (from, values, skipReset) {
+    const _self = jmEzMySQL;
+    let conditionStatement = '';
+    
+    // extract all parameter for query 
+    const { whereStatement, 
+            selectFields, 
+            orWhereStatement,
+            orderByFields, 
+            groupByFields, 
+            countField,
+            skipFieldValue,
+            limitFieldValue } = this;
+
+    // IF where condition applied
+    if (whereStatement.length > 0 ) {
+            conditionStatement = whereStatement.join(' AND ');
+    }
+    // IF where condition applied with OR
+    if (orWhereStatement.length > 0) {
+        conditionStatement += ` ${ conditionStatement ? ' OR ': ''} ${orWhereStatement.join(' OR ')}`
+    }
+    const tableFields = countField ? countField : selectFields;
+    let q = _self.prepareQuery(`${from} ${this.joins.join(' ')}`, tableFields, conditionStatement);
+    
+    // Add  Group by to query
+    groupByFields && (q += ` GROUP BY ${groupByFields}`);
+    
+    // Add  Order by to query
+    orderByFields.length > 0 && (q += ` ORDER BY ${orderByFields.join(', ')}`);
+    
+    // Set Limit INTO Query but query should not for count
+    if (!countField && limitFieldValue) {
+        q += ` LIMIT ${skipFieldValue || 0}, ${limitFieldValue}`;
+    }
+    
+    // Reset query pararms like joins, where etx.
+    !skipReset && resetInitQueryData.call(this);
+
+    return _self.public.query(q, values);
+    
+}
+const resetInitQueryData = function() {
+    this.joins = [];
+    this.whereStatement = [];
+    this.orWhereStatement = [];
+    this.selectFields = ' * ';
+    this.groupByFields = '';
+    this.orderByFields = [];
+    this.countField = '';
+    this.limitFieldValue = 0;
+    this.skipFieldValue = 0;
+}
+/**
+ * EXTEND CORE FEATURE
+ * @public
+ */
+jmEzMySQL.public.initQuery = function () {
+    const _self = {};
+    _self.join = join;
+    _self.leftJoin = leftJoin;
+    _self.rightJoin = rightJoin;
+    _self.innerJoin = innerJoin;
+    _self.where = where;
+    _self.orWhere = orWhere;
+    _self.execute = execute;
+    _self.select = select;
+    _self.groupBy = groupBy;
+    _self.orderBy = orderBy;
+    _self.count = count;
+    _self.skip = skip;
+    _self.limit = limit;
+    resetInitQueryData.call(_self);
+    return _self;
+}
+
 module.exports = jmEzMySQL.public;
