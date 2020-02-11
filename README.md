@@ -134,7 +134,7 @@ selectQuery.execute("table");
 //Select Query with multiple where condition
 const selectQuery = My.initQuery();
 selectQuery.where('id', 1);
-selectQuery.where('name', 'anish');
+selectQuery.where('name', 'somename');
 selectQuery.execute("table");
 
 
@@ -183,20 +183,20 @@ selectQuery.execute("table as t1");
 // Ex3. Left Join with Condition
 const selectQuery = My.initQuery();
 selectQuery.leftJoin("table2 as t2", "t2.t1ID = t1.id AND t2.name = ? "); 
-selectQuery.execute("table as t1", ['anish']);
-//query: SELECT  *  FROM table as t1 LEFT  JOIN table2 as t2 ON t2.t1ID = t1.id AND t2.name = 'anish'  WHERE 1=1; 
+selectQuery.execute("table as t1", ['somename']);
+//query: SELECT  *  FROM table as t1 LEFT  JOIN table2 as t2 ON t2.t1ID = t1.id AND t2.name = 'somename'  WHERE 1=1; 
 
 // Ex4. Inner Join
 
 const selectQuery = My.initQuery();
 selectQuery.innerJoin("table2 as t2", "t2.t1ID = t1.id");
-selectQuery.execute("table as t1", ['anish']);
+selectQuery.execute("table as t1");
 // Query: SELECT  *  FROM table1 as t1 INNER  JOIN table2 as t2 ON t2.t1ID = t1.id  WHERE 1=1;
 
 // Ex5.
 const selectQuery = My.initQuery();
 selectQuery.join("table2 as t2", "t2.t1ID = t1.id", "left"); // third argument will join type ex. (left, right, right outer, ...), default will inner
-selectQuery.execute("table as t1", ['anish']);
+selectQuery.execute("table as t1");
 
 
 
