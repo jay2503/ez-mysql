@@ -208,7 +208,7 @@ selectQuery.orWhere('name', 'serchContent');
 selectQuery.execute("table", [], true); // If third argument will be true than last condition will remains and used for further process, like for count.
 //Qeury: SELECT name, id, data FROM table  WHERE (id = 1 OR id = 50)  OR  name = 'serchContent'
 
-selectQuery.count(); // argument will string any filed name, defaul will id 
+selectQuery.count(); // argument can be any field name, default is id 
 selectQuery.execute("table");
 //Qeury: SELECT COUNT(table.id) as count  FROM table  WHERE (id = 1 OR id = 50) OR  name = 'serchContent'
 
@@ -218,7 +218,7 @@ const selectQuery = My.initQuery();
 selectQuery.orderBy('id', 'ASC');
 selectQuery.orderBy('name', 'DESC');
 selectQuery.execute("table");
-//Query: SELECT  *  FROM table  WHERE 1=1 ORDER BY id ASC, name DESC\
+//Query: SELECT  *  FROM table  WHERE 1=1 ORDER BY id ASC, name DESC
 
 //Use group by
 const selectQuery = My.initQuery();
@@ -228,8 +228,8 @@ selectQuery.execute("table");
 
 //Use Limit 
 const selectQuery = My.initQuery();
-selectQuery.skip(2); // number of record want to skip
-selectQuery.limit(10); //
+selectQuery.skip(2); // records want to skip
+selectQuery.limit(10);
 selectQuery.execute("table");
 //Query:SELECT  *  FROM table  WHERE 1=1 LIMIT 2, 10
 
