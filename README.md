@@ -141,26 +141,26 @@ selectQuery.execute("table");
 //Select Query with multiple(AND/OR) where condition
 const selectQuery = My.initQuery();
 selectQuery.where('id', 1);
-selectQuery.orWhere('name', 'serchContent');
+selectQuery.orWhere('name', 'searchContent');
 selectQuery.execute("table");
-//query : SELECT  *  FROM table  WHERE id = 1   OR  name = 'serchContent';
+//query : SELECT  *  FROM table  WHERE id = 1   OR  name = 'searchContent';
 
 //Select Query with multiple(AND/OR) with multple condition where condition
 const selectQuery = My.initQuery();
 selectQuery.where('(id = ? OR id = ?)', [1, 50]);
-selectQuery.orWhere('name', 'serchContent');
+selectQuery.orWhere('name', 'searchContent');
 selectQuery.execute("table");
 
 //Another way to pass condition value
 const selectQuery = My.initQuery();
 newQuery.where('(id = ? OR id = ?)');
-selectQuery.orWhere('name', 'serchContent');
+selectQuery.orWhere('name', 'searchContent');
 selectQuery.execute("table", [1, 50]);
-//query: SELECT  *  FROM table WHERE (id = 1 OR id = 50)  OR  name = 'serchContent';
+//query: SELECT  *  FROM table WHERE (id = 1 OR id = 50)  OR  name = 'searchContent';
 
 //Select custom fields
 const selectQuery = My.initQuery();
-selectQuery.select('name, id, data'); // argument can be String|Array , Default will *
+selectQuery.select('name, id, data'); // argument can be String|Array , Default is *
 selectQuery.execute("table", [1, 50]);
 //Query: SELECT name, id, data FROM table  WHERE 1=1
 
@@ -195,22 +195,22 @@ selectQuery.execute("table as t1");
 
 // Ex5.
 const selectQuery = My.initQuery();
-selectQuery.join("table2 as t2", "t2.t1ID = t1.id", "left"); // third argument will join type ex. (left, right, right outer, ...), default will inner
+selectQuery.join("table2 as t2", "t2.t1ID = t1.id", "left"); // third argument will join type ex. (left, right, right outer, ...), default is inner
 selectQuery.execute("table as t1");
 
 
 
-//Use last query for count
+//Use query as count
 const selectQuery = My.initQuery();
-selectQuery.select('name, id, data'); // argument can be String|Array , Default will *
+selectQuery.select('name, id, data'); // argument can be String|Array , Default is *
 selectQuery.where('(id = ? OR id = ?)', [1, 50]);
-selectQuery.orWhere('name', 'serchContent');
+selectQuery.orWhere('name', 'searchContent');
 selectQuery.execute("table", [], true); // If third argument will be true than last condition will remains and used for further process, like for count.
-//Qeury: SELECT name, id, data FROM table  WHERE (id = 1 OR id = 50)  OR  name = 'serchContent'
+//Qeury: SELECT name, id, data FROM table  WHERE (id = 1 OR id = 50)  OR  name = 'searchContent'
 
 selectQuery.count(); // argument can be any field name, default is id 
 selectQuery.execute("table");
-//Qeury: SELECT COUNT(table.id) as count  FROM table  WHERE (id = 1 OR id = 50) OR  name = 'serchContent'
+//Qeury: SELECT COUNT(table.id) as count  FROM table  WHERE (id = 1 OR id = 50) OR  name = 'searchContent'
 
 
 //Use order by
