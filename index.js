@@ -281,7 +281,7 @@ const _prepareJoinStatement = function _prepareJoinStatement(joinName, property,
  * @public
  */
 const innerJoin = function (tableJoinName, tableJoinCondition) {
-    _prepareJoinStatement.apply(this, [tableJoinName, tableJoinCondition]);
+    _prepareJoinStatement.apply(this, ['inner', tableJoinName, tableJoinCondition]);
 }
 /**
  * LEFT JOIN
