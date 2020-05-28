@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/jay2503/jm-ez-mysql#readme",
   "dependencies": {
-    "mysql": "github:felixge/node-mysql",
+    "mysql": "github:mysqljs/mysql",
     "q": "^1.4.1"
   },
   "devDependencies": {
